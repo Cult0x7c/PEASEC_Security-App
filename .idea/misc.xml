@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/sodia/AndroidStudioProjects/SecurityApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2385" />
+        <entry key="..\:/Users/sodia/AndroidStudioProjects/SecurityApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2385" />
+        <entry key="..\:/Users/sodia/AndroidStudioProjects/SecurityApp/app/src/main/res/layout/activity_main.xml" value="0.30141085934159895" />
         <entry key="..\:/Users/sodia/AndroidStudioProjects/SecurityApp/app/src/main/res/layout/activity_maps.xml" value="0.24592391304347827" />
       </map>
     </option>

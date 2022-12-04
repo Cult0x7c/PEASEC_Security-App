@@ -13,7 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SecurityApp"
         tools:targetApi="31">
-
+        <activity
+            android:name=".activity_newevent"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -30,15 +36,8 @@
             android:value="YOUR_API_KEY" />
 
         <activity
-            android:name=".MapsActivity"
-            android:exported="true"
-            android:label="@string/title_activity_maps">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:name=".MainActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

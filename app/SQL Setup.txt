@@ -1,0 +1,44 @@
+Pull Docker Image:
+docker pull mysql
+
+Create Initial Docker Container:
+docker run --name peasec-sql -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password --restart unless-stopped -v mysql:/var/lib/peasec-sql mysql
+
+Connect to Docker:
+docker exec -it peasec-sql bash
+mysql -uroot -p
+
+Start Docker:
+docker start peasec-sql
+
+Setup DB:
+CREATE DATABASE main;
+USE main;
+
+CREATE TABLE reports (report_id INT(11) NOT NULL AUTO_INCREMENT, lat DOUBLE DEFAULT 0, lng DOUBLE DEFAULT 0, title VARCHAR(20),
+details VARCHAR (255), PRIMARY KEY (report_id));
+
+mysql> describe reports
+    -> ;
++-----------+--------------+------+-----+---------+----------------+
+| Field     | Type         | Null | Key | Default | Extra          |
++-----------+--------------+------+-----+---------+----------------+
+| report_id | int          | NO   | PRI | NULL    | auto_increment |
+| lat       | double       | YES  |     | 0       |                |
+| lng       | double       | YES  |     | 0       |                |
+| title     | varchar(20)  | YES  |     | NULL    |                |
+| details   | varchar(255) | YES  |     | NULL    |                |
++-----------+--------------+------+-----+---------+----------------+
+
+INSERT INTO reports VALUES ('1', '22.4', '33.1', 'Car Accident', 'Test Post losereds dfsdjfea e redrfe  fdfd');
+INSERT INTO reports VALUES ('2', '22.4', '33.1', 'Car Accident', 'Test Post losereds dfsdjfea e redrfe  fdfd');
+
+mysql> SELECT * FROM reports
+    -> ;
++-----------+------+------+--------------+--------------------------------------------+
+| report_id | lat  | lng  | title        | details                                    |
++-----------+------+------+--------------+--------------------------------------------+
+|         1 | 22.4 | 33.1 | Car Accident | Test Post losereds dfsdjfea e redrfe  fdfd |
+|         2 | 22.4 | 33.1 | Car Accident | Test Post losereds dfsdjfea e redrfe  fdfd |
++-----------+------+------+--------------+--------------------------------------------+
+2 rows in set (0.00 sec)

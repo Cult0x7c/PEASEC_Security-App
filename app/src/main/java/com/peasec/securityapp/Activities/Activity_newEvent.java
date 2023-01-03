@@ -2,10 +2,15 @@ package com.peasec.securityapp.Activities;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -21,6 +26,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.peasec.securityapp.Network.HttpClient;
 import com.peasec.securityapp.Objects.Event;
@@ -31,18 +46,45 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Activity_newEvent extends AppCompatActivity {
+public class Activity_newEvent extends AppCompatActivity implements OnMapReadyCallback {
 
     private Bitmap selectedImageBitmap;
     private View view;
+
+    MapView mapView;
+    GoogleMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newevent);
-
-
+        initMap(savedInstanceState);
         fillSpinner();
+    }
+
+    private void initMap(Bundle savedInstanceState) {
+        // Gets the MapView from the XML layout and creates it
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapFragment);
+        mapFragment.getMapAsync(this);
+
+
+
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        GoogleMap mMap = googleMap;
+
+
+        /*
+        // Add a marker in Sydney and move the camera
+                LatLng sydney = new LatLng(-34, 151);
+                mMap.addMarker(new MarkerOptions()
+                        .position(sydney)
+                        .title("Marker in Sydney"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
+
     }
 
     // populate spinnter with items
@@ -138,6 +180,7 @@ public class Activity_newEvent extends AppCompatActivity {
                     }
                 }
             });
+
 
 
 }

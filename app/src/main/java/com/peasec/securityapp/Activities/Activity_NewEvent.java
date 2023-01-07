@@ -5,40 +5,32 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.peasec.securityapp.Network.HttpClient;
 import com.peasec.securityapp.Objects.Event;
+import com.peasec.securityapp.Objects.GoMap;
 import com.peasec.securityapp.R;
 
 import java.io.ByteArrayOutputStream;
@@ -46,36 +38,43 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Activity_newEvent extends AppCompatActivity implements OnMapReadyCallback {
+public class Activity_NewEvent extends AppCompatActivity implements OnMapReadyCallback {
 
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 100 ;
     private Bitmap selectedImageBitmap;
     private View view;
 
-    MapView mapView;
-    GoogleMap map;
+    private MapView mapView;
+    private GoogleMap map;
+    private Object lastKnownLocation;
+    private GoMap goMap;
+
+
+    private boolean locationPermissionGranted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newevent);
-        initMap(savedInstanceState);
+
         fillSpinner();
+        initMap();
+
     }
 
-    private void initMap(Bundle savedInstanceState) {
+    private void initMap() {
         // Gets the MapView from the XML layout and creates it
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapFragment);
         mapFragment.getMapAsync(this);
-
-
-
     }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         GoogleMap mMap = googleMap;
 
+        //create GoMap
+        this.goMap = new GoMap(googleMap,this);
 
         /*
         // Add a marker in Sydney and move the camera
@@ -106,8 +105,18 @@ public class Activity_newEvent extends AppCompatActivity implements OnMapReadyCa
         //create event object
         String category = ((Spinner) findViewById(R.id.spinnerCategory)).getSelectedItem().toString();
         //Pair<Double,Double> location = new Pair<Double,Double>(1.00, 2.00);
-        Double longitude = 1.00;
-        Double latidude = 2.00;
+        Double longitude;
+        Double latidude;
+        if(goMap.getMarkerLocation()!=null){
+            //use marker location
+            longitude = goMap.getMarkerLocation().longitude;
+            latidude = goMap.getMarkerLocation().latitude;
+        }
+        else{
+            longitude = goMap.getLastKnownLocation().getLongitude();
+            latidude = goMap.getLastKnownLocation().getLatitude();
+        }
+
         String description = ((EditText) findViewById(R.id.tbEventDescription)).toString();
 
         Drawable drawable = ((ImageView) findViewById(R.id.ivEventImg1)).getDrawable();
@@ -124,7 +133,12 @@ public class Activity_newEvent extends AppCompatActivity implements OnMapReadyCa
 
         //send event to API
         HttpClient httpClient = new HttpClient();
-        httpClient.post(jsonEvent);
+        try {
+            httpClient.post(jsonEvent);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private String encodeToBase64(Bitmap image)
@@ -145,6 +159,7 @@ public class Activity_newEvent extends AppCompatActivity implements OnMapReadyCa
         this.view = v;
 
     }
+
     private ActivityResultLauncher<Intent> launchSomeActivity
             = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -181,6 +196,44 @@ public class Activity_newEvent extends AppCompatActivity implements OnMapReadyCa
                 }
             });
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        locationPermissionGranted = false;
+        if (requestCode
+                == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {// If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                locationPermissionGranted = true;
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+        goMap.updateLocationUI();
+    }
+
+    public void getLocationPermission() {
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            locationPermissionGranted = true;
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
+
+    public boolean isLocationPermissionGranted() {
+        return locationPermissionGranted;
+    }
 
 
 }

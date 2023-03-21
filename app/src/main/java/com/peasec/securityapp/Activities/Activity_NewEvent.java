@@ -1,53 +1,52 @@
 package com.peasec.securityapp.Activities;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.gson.Gson;
 import com.peasec.securityapp.Network.HttpClient;
 import com.peasec.securityapp.Objects.Event;
-import com.peasec.securityapp.Objects.GoMap;
+import com.peasec.securityapp.Objects.GoMap_NewEvent;
+import com.peasec.securityapp.Objects.UserCred;
 import com.peasec.securityapp.R;
+import com.peasec.securityapp.Storage.SharedPref;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Activity_NewEvent extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 100 ;
-    private Bitmap selectedImageBitmap;
     private View view;
-
-    private MapView mapView;
-    private GoogleMap map;
-    private Object lastKnownLocation;
-    private GoMap goMap;
+    private UserCred userCred;
+    private GoMap_NewEvent goMap;
 
 
     private boolean locationPermissionGranted;
@@ -60,21 +59,29 @@ public class Activity_NewEvent extends AppCompatActivity implements OnMapReadyCa
         fillSpinner();
         initMap();
 
+        //get user credentials to post new event
+        SharedPref sharedPref = new SharedPref(this);
+        this.userCred=sharedPref.getUserCredentials();
+
+        //manipulate alpha for imageRecognition
+        ((ImageView)findViewById(R.id.ivEventImg1)).setImageAlpha(254);
+        ((ImageView)findViewById(R.id.ivEventImg2)).setImageAlpha(254);
+        ((ImageView)findViewById(R.id.ivEventImg3)).setImageAlpha(254);
     }
 
     private void initMap() {
         // Gets the MapView from the XML layout and creates it
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapFragment);
+                .findFragmentById(R.id.mapEventDetails);
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
     }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        GoogleMap mMap = googleMap;
 
-        //create GoMap
-        this.goMap = new GoMap(googleMap,this);
+        //create GoMap_NewEvent
+        this.goMap = new GoMap_NewEvent(googleMap,this);
 
         /*
         // Add a marker in Sydney and move the camera
@@ -89,8 +96,12 @@ public class Activity_NewEvent extends AppCompatActivity implements OnMapReadyCa
     // populate spinnter with items
     private void fillSpinner(){
         List<String> spinnerArray =  new ArrayList<String>();
-        spinnerArray.add("item1");
-        spinnerArray.add("item2");
+        spinnerArray.add("Demonstration");
+        spinnerArray.add("Traffic Accident");
+        spinnerArray.add("Explosion");
+        spinnerArray.add("Chemical Hazard");
+        spinnerArray.add("Natural Catastrophe");
+        spinnerArray.add("Other");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, spinnerArray);
@@ -101,12 +112,14 @@ public class Activity_NewEvent extends AppCompatActivity implements OnMapReadyCa
 
     }
 
-    public void submitReport(View v) throws IOException {
+    //create new event
+    public void submitReport(View v) {
+        disableSubmitReportButton();
         //create event object
         String category = ((Spinner) findViewById(R.id.spinnerCategory)).getSelectedItem().toString();
         //Pair<Double,Double> location = new Pair<Double,Double>(1.00, 2.00);
-        Double longitude;
-        Double latidude;
+        double longitude;
+        double latidude;
         if(goMap.getMarkerLocation()!=null){
             //use marker location
             longitude = goMap.getMarkerLocation().longitude;
@@ -117,49 +130,94 @@ public class Activity_NewEvent extends AppCompatActivity implements OnMapReadyCa
             latidude = goMap.getLastKnownLocation().getLatitude();
         }
 
-        String description = ((EditText) findViewById(R.id.tbEventDescription)).toString();
+        String description = String.valueOf(((EditText) findViewById(R.id.tbEventDescription)).getText());
+        //ToDo: implement geolocating by coordinates
 
-        Drawable drawable = ((ImageView) findViewById(R.id.ivEventImg1)).getDrawable();
-        BitmapDrawable bd = (BitmapDrawable) drawable;
-        Bitmap bitmapImage = bd.getBitmap();
+        String country = locateCountry(latidude, longitude);
 
-        String b64Image = encodeToBase64(bitmapImage);
+        String b64Image1 = encodeToBase64(((BitmapDrawable) ((ImageView) findViewById(R.id.ivEventImg1)).getDrawable()).getBitmap());
+        String b64Image2 = encodeToBase64(((BitmapDrawable) ((ImageView) findViewById(R.id.ivEventImg2)).getDrawable()).getBitmap());
+        String b64Image3 = encodeToBase64(((BitmapDrawable) ((ImageView) findViewById(R.id.ivEventImg3)).getDrawable()).getBitmap());
 
-        Event event = new Event(category,longitude,latidude,description,b64Image);
+        if (((ImageView) findViewById(R.id.ivEventImg1)).getDrawable().getAlpha() < 255){
+            b64Image1 = "";
+        }
+        if (((ImageView) findViewById(R.id.ivEventImg2)).getDrawable().getAlpha() < 255){
+            b64Image2 = "";
+        }
+        if (((ImageView) findViewById(R.id.ivEventImg3)).getDrawable().getAlpha() < 255){
+            b64Image3 = "";
+        }
 
-        //create json object
+
+
+        Event event = new Event(category,description,longitude,latidude,country,b64Image1,b64Image2,b64Image3);
+
+        //create json object of userCred
         Gson gson = new Gson();
         String jsonEvent = gson.toJson(event);
+        String jsonUserCred = gson.toJson(this.userCred);
 
         //send event to API
-        HttpClient httpClient = new HttpClient();
+        HttpClient httpClient = new HttpClient(this);
         try {
-            httpClient.post(jsonEvent);
+            httpClient.authenticate(jsonUserCred,jsonEvent);
+            //httpClient.postEvent(jsonEvent);
         }
         catch (Exception e){
             e.printStackTrace();
         }
     }
 
+    private String locateCountry(Double lat, Double lng) {
+        String countryName = "None";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+
+            if (addresses.size() > 0)
+            {
+                countryName=addresses.get(0).getCountryName();
+            }
+
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+        return countryName;
+    }
+
+    private void disableSubmitReportButton() {
+        ((Button)findViewById(R.id.btnSubmitReport)).setEnabled(false);
+    }
+
+    public void enableSubmitReportButton(){
+        ((Button)findViewById(R.id.btnSubmitReport)).setEnabled(true);
+    }
+
+    //encode bitmap to b64String
     private String encodeToBase64(Bitmap image)
     {
-        int quality= 100;
-        Bitmap.CompressFormat compressFormat= Bitmap.CompressFormat.JPEG;
+        int quality= 10;
+        Bitmap.CompressFormat compressFormat= Bitmap.CompressFormat.WEBP;
         ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
         image.compress(compressFormat, quality, byteArrayOS);
-        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
+        String b64String = Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
+        byte[] b64Bytes = b64String.getBytes(StandardCharsets.UTF_8);
+
+        return new String(b64Bytes,StandardCharsets.UTF_8);
     }
 
     public void openGallery(View v){
         Intent i = new Intent();
         i.setType("image/*");
         i.setAction(Intent.ACTION_GET_CONTENT);
-        int x=0;
         launchSomeActivity.launch(i);
         this.view = v;
 
     }
 
+    //this is to open the dialog on the phone to select the image
     private ActivityResultLauncher<Intent> launchSomeActivity
             = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -180,12 +238,15 @@ public class Activity_NewEvent extends AppCompatActivity implements OnMapReadyCa
                             switch (this.view.getId()) {
                                 case R.id.ivEventImg1:
                                     ((ImageView)findViewById(R.id.ivEventImg1)).setImageBitmap(selectedImageBitmap);
+                                    ((ImageView)findViewById(R.id.ivEventImg1)).setImageAlpha(255);
                                     break;
                                 case R.id.ivEventImg2:
                                     ((ImageView)findViewById(R.id.ivEventImg2)).setImageBitmap(selectedImageBitmap);
+                                    ((ImageView)findViewById(R.id.ivEventImg2)).setImageAlpha(255);
                                     break;
                                 case R.id.ivEventImg3:
                                     ((ImageView)findViewById(R.id.ivEventImg3)).setImageBitmap(selectedImageBitmap);
+                                    ((ImageView)findViewById(R.id.ivEventImg3)).setImageAlpha(255);
                                     break;
                             }
                         }
@@ -214,21 +275,8 @@ public class Activity_NewEvent extends AppCompatActivity implements OnMapReadyCa
         goMap.updateLocationUI();
     }
 
-    public void getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            locationPermissionGranted = true;
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
+    public void setAccessTokentoUserCred(String token){
+        this.userCred.setAccessToken(token);
     }
 
     public boolean isLocationPermissionGranted() {
@@ -236,4 +284,7 @@ public class Activity_NewEvent extends AppCompatActivity implements OnMapReadyCa
     }
 
 
+    public void setLocationPermissionGranted(boolean b) {
+        this.locationPermissionGranted = b;
+    }
 }

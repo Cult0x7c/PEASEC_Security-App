@@ -36,13 +36,13 @@
         android:text="Where did it happen?"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/mapFragment"
+        app:layout_constraintBottom_toTopOf="@+id/mapEventDetails"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerCategory" />
 
     <fragment
-        android:id="@+id/mapFragment"
+        android:id="@+id/mapEventDetails"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="360dp"
         android:layout_height="210dp"
@@ -65,22 +65,23 @@
         android:text="Are there images? (optional)"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/ivEventImg1"
+        app:layout_constraintBottom_toTopOf="@+id/ivEventImg2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tbEventDescription" />
 
     <ImageView
-        android:id="@+id/ivEventImg1"
+        android:id="@+id/ivEventImg2"
         android:layout_width="101dp"
         android:layout_height="91dp"
         android:layout_marginTop="8dp"
+        android:alpha="254"
         android:onClick="openGallery"
         android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@+id/ivEventImg3"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/ivEventImg2"
+        app:layout_constraintStart_toEndOf="@+id/ivEventImg1"
         app:layout_constraintTop_toBottomOf="@+id/textView6"
         app:srcCompat="@android:drawable/ic_input_add"
         tools:srcCompat="@tools:sample/avatars[2]" />
@@ -90,21 +91,23 @@
         android:layout_width="101dp"
         android:layout_height="91dp"
         android:layout_marginTop="8dp"
+        android:alpha="254"
         android:onClick="openGallery"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/ivEventImg1"
+        app:layout_constraintStart_toEndOf="@+id/ivEventImg2"
         app:layout_constraintTop_toBottomOf="@+id/textView6"
         app:srcCompat="@android:drawable/ic_input_add"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
-        android:id="@+id/ivEventImg2"
+        android:id="@+id/ivEventImg1"
         android:layout_width="101dp"
         android:layout_height="91dp"
         android:layout_marginTop="8dp"
+        android:alpha="254"
         android:onClick="openGallery"
-        app:layout_constraintEnd_toStartOf="@+id/ivEventImg1"
+        app:layout_constraintEnd_toStartOf="@+id/ivEventImg2"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6"
@@ -112,7 +115,7 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnSubmitReport"
         android:layout_width="196dp"
         android:layout_height="65dp"
         android:layout_marginTop="16dp"
@@ -122,7 +125,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivEventImg1"
+        app:layout_constraintTop_toBottomOf="@+id/ivEventImg2"
         app:layout_constraintVertical_bias="0.235" />
 
     <EditText
@@ -166,7 +169,7 @@
         app:layout_constraintBottom_toTopOf="@+id/tbEventDescription"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapFragment" />
+        app:layout_constraintTop_toBottomOf="@+id/mapEventDetails" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"

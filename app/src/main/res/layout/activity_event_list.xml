@@ -7,8 +7,24 @@
     tools:context=".Activities.Activity_EventList">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="409dp"
-        android:layout_height="889dp"
+        android:id="@+id/recycler_eventList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="1dp" />
+
+    <TextView
+        android:id="@+id/tvErrorEventList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_eventList"
+        app:layout_constraintEnd_toStartOf="@+id/recycler_eventList"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/recycler_eventList"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_eventList"
+        app:layout_constraintVertical_bias="0.5"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

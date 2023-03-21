@@ -3,10 +3,13 @@ package com.peasec.securityapp.Objects;
 import static com.google.android.gms.location.Priority.PRIORITY_BALANCED_POWER_ACCURACY;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -17,24 +20,28 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.net.PlacesClient;
+
 import com.peasec.securityapp.Activities.Activity_NewEvent;
-import com.peasec.securityapp.R;
 
-public class GoMap {
+public class GoMap_NewEvent {
     private static final float DEFAULT_ZOOM = 17;
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 100;
 
-    private final PlacesClient placesClient;
     private final GoogleMap map;
     private final FusedLocationProviderClient fusedLocationProviderClient;
     private final Context context;
     private final Activity_NewEvent activity_newEvent;
     private Location lastKnownLocation;
-    private final String tag ="GoMap";
+    private final String tag ="GoMap_NewEvent";
     private LatLng defaultLocation = new LatLng(-34, 151);
 
     public Location getLastKnownLocation() {
+        if(lastKnownLocation==null){
+            Location defLoc = new Location("");
+            defLoc.setLatitude(0.0d);
+            defLoc.setLongitude(0.0d);
+            return defLoc;
+        }
         return lastKnownLocation;
     }
 
@@ -44,15 +51,10 @@ public class GoMap {
 
     private LatLng markerLocation;
 
-    public GoMap(GoogleMap googleMap, Context context){
+    public GoMap_NewEvent(GoogleMap googleMap, Context context){
         this.map = googleMap;
         this.context = context;
         this.activity_newEvent = (Activity_NewEvent) context;
-
-
-        // Construct a PlacesClient
-        Places.initialize(context, context.getString(R.string.MapsApiKey));
-        placesClient = Places.createClient(context);
 
         // Construct a FusedLocationProviderClient.
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
@@ -87,6 +89,8 @@ public class GoMap {
             }
 
         });
+
+        map.setOnMyLocationButtonClickListener(() -> false);
 
     }
 
@@ -139,13 +143,29 @@ public class GoMap {
                 lastKnownLocation = null;
 
                 Activity_NewEvent activity = (Activity_NewEvent) context;
-                activity.getLocationPermission();
+                getLocationPermission();
             }
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
         }
     }
 
+    public void getLocationPermission() {
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+        if (ContextCompat.checkSelfPermission(this.context.getApplicationContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            this.activity_newEvent.setLocationPermissionGranted(true);
+        } else {
+            ActivityCompat.requestPermissions(this.activity_newEvent,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
 
 
 

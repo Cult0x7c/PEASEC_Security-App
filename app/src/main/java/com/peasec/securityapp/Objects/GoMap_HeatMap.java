@@ -168,13 +168,6 @@ public class GoMap_HeatMap {
     public void addHeatMap(List<LatLng> latLngList) {
         Collection<LatLng> latLngs = latLngList;
 
-        // Get the data: latitude/longitude positions of police stations.
-        /*try {
-            latLngs = readItems(R.raw.police_stations);
-        } catch (JSONException e) {
-            Toast.makeText(this, "Problem reading list of locations.", Toast.LENGTH_LONG).show();
-        }*/
-
         // Create a heat map tile provider, passing it the latlngs of the police stations.
         int points;
 

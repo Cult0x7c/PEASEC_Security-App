@@ -198,7 +198,7 @@ public class Activity_NewEvent extends AppCompatActivity implements OnMapReadyCa
     //encode bitmap to b64String
     private String encodeToBase64(Bitmap image)
     {
-        int quality= 10;
+        int quality= 5;
         Bitmap.CompressFormat compressFormat= Bitmap.CompressFormat.WEBP;
         ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
         image.compress(compressFormat, quality, byteArrayOS);

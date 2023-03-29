@@ -99,7 +99,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             }
             DecimalFormat df = new DecimalFormat("0.00");
             LatLng eventLocation = new LatLng(event.getLat(),event.getLng());
-            Double distance = SphericalUtil.computeDistanceBetween(myLocation, eventLocation);
+            Double distance = SphericalUtil.computeDistanceBetween(myLocation, eventLocation) * 0.001;
             return df.format(distance) + " km";
         }
     }
@@ -109,5 +109,13 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
         }
+    }
+
+    public List<Event> getEventList() {
+        return eventList;
+    }
+
+    public void setEventList(List<Event> eventList) {
+        this.eventList = eventList;
     }
 }

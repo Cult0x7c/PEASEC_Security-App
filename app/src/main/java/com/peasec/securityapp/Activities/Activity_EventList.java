@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -18,17 +21,19 @@ import com.peasec.securityapp.Network.HttpClient;
 import com.peasec.securityapp.Objects.Event;
 import com.peasec.securityapp.R;
 
-import java.lang.reflect.GenericSignatureFormatError;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 public class Activity_EventList extends AppCompatActivity implements HttpEventInterface {
     private EventListAdapter eventListAdapter;
     private RecyclerView recyclerView;
+    private ArrayList<Event> eventListCopy;
 
     public LatLng getMyLocation() {
         return myLocation;
     }
-
     private LatLng myLocation;
 
     @Override
@@ -58,6 +63,66 @@ public class Activity_EventList extends AppCompatActivity implements HttpEventIn
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+        
+        //create spinner list with available countries
+        List<String> spinnerArray =  new ArrayList<String>();
+
+        //safe a copy of the full list before filtering
+        eventListCopy = new ArrayList<>(eventList);
+
+        eventList.forEach(e ->{
+            spinnerArray.add(e.getCountry());
+        });
+        spinnerArray.add("All");
+
+        //remove duplicates
+        List<String> spinnerArrayCleaned =  new ArrayList<String>(new HashSet<>(spinnerArray));
+
+        //finally fill spinner with data
+        fillSpinner(spinnerArrayCleaned);
+    }
+
+    private void fillSpinner(List<String> spinnerArray){
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, spinnerArray);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner sItems = (Spinner) findViewById(R.id.spinnerEventList);
+        sItems.setAdapter(adapter);
+        //add listener for country change
+        sItems.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                filter(adapterView.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    public void filter(String country) {
+        if (!country.equals("All")) {
+            List<Event> eventList = new ArrayList<>(eventListCopy);
+            /*eventList.forEach(e->{
+                if(!e.getCountry().equals(country)){
+                    eventList.remove(e);
+                }*/
+
+            for (Iterator<Event> iterator = eventList.iterator(); iterator.hasNext(); ) {
+                String value = iterator.next().getCountry();
+                if (!value.equals(country)) {
+                    iterator.remove();
+                }
+            }
+            eventListAdapter.setEventList(eventList);
+        }
+        else{
+            eventListAdapter.setEventList(eventListCopy);
+        }
+        eventListAdapter.notifyDataSetChanged();
     }
 
     @Override

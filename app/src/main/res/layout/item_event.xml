@@ -46,7 +46,7 @@
         android:id="@+id/tvDistance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="180dp"
+        android:layout_marginStart="204dp"
         android:layout_marginTop="72dp"
         android:text="Distance to event"
         app:layout_constraintStart_toEndOf="@+id/ivThumbnail"

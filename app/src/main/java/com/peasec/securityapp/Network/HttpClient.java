@@ -23,7 +23,7 @@ import java.util.List;
 import okhttp3.Headers;
 
 public class HttpClient {
-    private final static String serverUrl = "http://192.168.178.21:5000";
+    private final static String serverUrl = "http://104.248.253.183:5000";
     private final static String endPoint_PostEvent = "/report";
     private final static String endPoint_GetAllEvents = "/get_reports";
     private final static String endPoint_GetEventByID = "/report/";     //-- /report/{reportId} --

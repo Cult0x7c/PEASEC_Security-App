@@ -20,7 +20,7 @@ The main role in this project plays the Google Maps SDK. Therefore I have create
 
 `GoMap_Detail` - for the detail view of an event, basically just shows you a zoomed in view on the map to the location of the event.
 
-The networking part is implement using the AsyncHttpClient library (https://github.com/codepath/CPAsyncHttpClient).
+The networking part is implemented using the AsyncHttpClient library (https://github.com/codepath/CPAsyncHttpClient).
 
 ## A little bit about the activities
 ## Heatmap Activity (entry point)

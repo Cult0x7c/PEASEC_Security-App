@@ -1,13 +1,13 @@
 # SecurityApp
 ## How to configure the app
 1. Setup your Google Maps API Key a tutorial how to get yours can be found here:
-  1.1 get the key
+  - get the key
   https://developers.google.com/maps/documentation/android-sdk/get-api-key?hl=de
-  1.2 setup your key into the AndroidManifest.xml file of your project
+  - setup your key into the AndroidManifest.xml file of your project
   https://developers.google.com/maps/documentation/android-sdk/config?hl=de
 
 2. Change the IP adress accordingly to your backend in the project Network->HttpClient
-private final static String serverUrl = "http://<IP>:<PORT>";
+`private final static String serverUrl = "http://<IP>:<PORT>";`
 
 3. Start backend server and now you can launch the app
 

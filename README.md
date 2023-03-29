@@ -24,9 +24,6 @@ The networking part is implement using the AsyncHttpClient library (https://gith
 
 ## A little bit about the activities
 ## Heatmap Activity (entry point)
-<picture>
-  <source srcset="https://github.com/Cult0x7c/PEASEC_Security-App/blob/main/Screenshots/Screenshot_2023-03-29-14-33-12-978_com.peasec.securityapp.jpg?raw=true">
-</picture>
-
+![alt text]([http://url/to/img.png](https://github.com/Cult0x7c/PEASEC_Security-App/blob/main/Screenshots/Screenshot_2023-03-29-14-33-12-978_com.peasec.securityapp.jpg?raw=true))
 ## Caution changing backend servers with already initialised app:
 During the first start of the app an account will be generated in the background and saved into the Apps shared preference file. If you change the backend server, therefore you have to delete the apps preference file first, io that it will generate a new account on the new backend server. This file can be found in the devices storage under: data->data->com.peasec.security.app->shared_prefs->PEASEC_SharedPref.xml

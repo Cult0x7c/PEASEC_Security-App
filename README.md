@@ -7,7 +7,9 @@
   https://developers.google.com/maps/documentation/android-sdk/config?hl=de
 
 2. Change the IP adress accordingly to your backend in the project Network->HttpClient
-`private final static String serverUrl = "http://<IP>:<PORT>";`
+```java
+private final static String serverUrl = "http://<IP>:<PORT>";
+```
 
 3. Start backend server and now you can launch the app
 
@@ -16,7 +18,7 @@ The main role in this project plays the Google Maps SDK. Therefore I have create
 
 `GoMap_HeatMap` - shows you the map with heatmap tiles, if you zoom every event will get a marker on the map, the markers are clickable and will bring you the the detail view of the event
 
-`GoMap_NewEvent` - has the ability to set your position with a marker on the map
+`GoMap_NewEvent` - has the ability to set your position with a marker on the map, 
 
 `GoMap_Detail` - for the detail view of an event, basically just shows you a zoomed in view on the map to the location of the event.
 
@@ -29,5 +31,6 @@ The networking part is implemented using the AsyncHttpClient library (https://gi
 <img src="https://raw.githubusercontent.com/Cult0x7c/PEASEC_Security-App/main/Screenshots/Screenshot_2023-03-29-14-33-12-978_com.peasec.securityapp.jpg" width="250px" align="left">
 <img src="https://raw.githubusercontent.com/Cult0x7c/PEASEC_Security-App/main/Screenshots/Screenshot_2023-03-29-14-33-12-978_com.peasec.securityapp.jpg" width="250px" align="left">
 <br>
+
 ## Caution changing backend servers with already initialised app:
 During the first start of the app an account will be generated in the background and saved into the Apps shared preference file. If you change the backend server, therefore you have to delete the apps preference file first, io that it will generate a new account on the new backend server. This file can be found in the devices storage under: `data->data->com.peasec.security.app->shared_prefs->PEASEC_SharedPref.xml`

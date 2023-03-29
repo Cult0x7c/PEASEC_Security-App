@@ -14,11 +14,11 @@
 ## A little bit about the code implementation
 The main role in this project plays the Google Maps SDK. Therefore I have created 3 classes, which will provide you with the neccessary functionalities for each activity.
 
-GoMap_HeatMap - shows you the map with heatmap tiles, if you zoom every event will get a marker on the map, the markers are clickable and will bring you the the detail view of the event
+`GoMap_HeatMap` - shows you the map with heatmap tiles, if you zoom every event will get a marker on the map, the markers are clickable and will bring you the the detail view of the event
 
-GoMap_NewEvent - has the ability to set your position with a marker on the map
+`GoMap_NewEvent` - has the ability to set your position with a marker on the map
 
-GoMap_Detail - for the detail view of an event, basically just shows you a zoomed in view on the map to the location of the event.
+`GoMap_Detail` - for the detail view of an event, basically just shows you a zoomed in view on the map to the location of the event.
 
 The networking part is implement using the AsyncHttpClient library (https://github.com/codepath/CPAsyncHttpClient).
 

@@ -26,10 +26,10 @@ The networking part is implemented using the AsyncHttpClient library (https://gi
 
 ## A little bit about the activities
 
-<img src="https://raw.githubusercontent.com/Cult0x7c/PEASEC_Security-App/main/Screenshots/Screenshot_2023-03-29-14-33-12-978_com.peasec.securityapp.jpg" width="190px" align="left">
-<img src="https://raw.githubusercontent.com/Cult0x7c/PEASEC_Security-App/main/Screenshots/Screenshot_2023-03-29-14-33-24-004_com.peasec.securityapp.jpg" width="190px" align="left">
-<img src="https://raw.githubusercontent.com/Cult0x7c/PEASEC_Security-App/main/Screenshots/Screenshot_2023-03-29-14-33-42-956_com.peasec.securityapp.jpg" width="190px" align="left">
-<img src="https://raw.githubusercontent.com/Cult0x7c/PEASEC_Security-App/main/Screenshots/Screenshot_2023-03-29-14-34-14-622_com.peasec.securityapp.jpg" width="190px" align="left">
+<img src="https://raw.githubusercontent.com/Cult0x7c/PEASEC_Security-App/main/Screenshots/Screenshot_2023-03-29-14-33-12-978_com.peasec.securityapp.jpg" width="185px" align="left">
+<img src="https://raw.githubusercontent.com/Cult0x7c/PEASEC_Security-App/main/Screenshots/Screenshot_2023-03-29-14-33-24-004_com.peasec.securityapp.jpg" width="185px" align="left">
+<img src="https://raw.githubusercontent.com/Cult0x7c/PEASEC_Security-App/main/Screenshots/Screenshot_2023-03-29-14-33-42-956_com.peasec.securityapp.jpg" width="185px" align="left">
+<img src="https://raw.githubusercontent.com/Cult0x7c/PEASEC_Security-App/main/Screenshots/Screenshot_2023-03-29-14-34-14-622_com.peasec.securityapp.jpg" width="185px" align="left">
 <br>
 abc
 <br />

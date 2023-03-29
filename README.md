@@ -30,7 +30,7 @@ The networking part is implemented using the AsyncHttpClient library (https://gi
 <img src="https://raw.githubusercontent.com/Cult0x7c/PEASEC_Security-App/main/Screenshots/Screenshot_2023-03-29-14-33-24-004_com.peasec.securityapp.jpg" width="185px" align="left" title="Event List Activity>
 <img src="https://raw.githubusercontent.com/Cult0x7c/PEASEC_Security-App/main/Screenshots/Screenshot_2023-03-29-14-33-42-956_com.peasec.securityapp.jpg" width="185px" align="left" title="Create Event Activity">
 <img src="https://raw.githubusercontent.com/Cult0x7c/PEASEC_Security-App/main/Screenshots/Screenshot_2023-03-29-14-34-14-622_com.peasec.securityapp.jpg" width="185px" align="left" title="Event Detail Activity">
-<br>
+
 <br>
 
 `Heatmap Activity` - shows the Heatmap with markers for each single event when zoomed in

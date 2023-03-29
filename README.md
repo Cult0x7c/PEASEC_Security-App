@@ -24,7 +24,7 @@ The networking part is implement using the AsyncHttpClient library (https://gith
 
 ## A little bit about the activities
 ## Heatmap Activity (entry point)
-<img src="https://raw.githubusercontent.com/Cult0x7c/PEASEC_Security-App/main/Screenshots/Screenshot_2023-03-29-14-33-12-978_com.peasec.securityapp.jpg" width="200px" align="center">
+<img src="https://raw.githubusercontent.com/Cult0x7c/PEASEC_Security-App/main/Screenshots/Screenshot_2023-03-29-14-33-12-978_com.peasec.securityapp.jpg" width="200px" align="left">
 <br>
 abc
 <br>

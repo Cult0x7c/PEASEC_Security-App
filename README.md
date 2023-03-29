@@ -11,7 +11,7 @@ private final static String serverUrl = "http://<IP>:<PORT>";
 
 3. Start backend server and now you can launch the app
 
-A little bit about the code implementation
+## A little bit about the code implementation
 The main role in this project plays the Google Maps SDK. Therefore I have created 3 classes, which will provide you with the neccessary functionalities for each activity.
 
 GoMap_HeatMap - shows you the map with heatmap tiles, if you zoom every event will get a marker on the map, the markers are clickable and will bring you the the detail view of the event
@@ -22,5 +22,5 @@ GoMap_Detail - for the detail view of an event, basically just shows you a zoome
 
 The networking part is implement using the AsyncHttpClient library (https://github.com/codepath/CPAsyncHttpClient).
 
-Caution changing backend servers with already initialised app:
+## Caution changing backend servers with already initialised app:
 During the first start of the app an account will be generated in the background and saved into the Apps shared preference file. If you change the backend server, therefore you have to delete the apps preference file first, io that it will generate a new account on the new backend server. This file can be found in the devices storage under: data->data->com.peasec.security.app->shared_prefs->PEASEC_SharedPref.xml

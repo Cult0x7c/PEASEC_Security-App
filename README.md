@@ -36,6 +36,7 @@ The networking part is implemented using the AsyncHttpClient library (https://gi
 
 <br>
 
+
 `Heatmap Activity` - shows the Heatmap with markers for each single event when zoomed in
 
 `Event List Activity` - lists all events, events can be filtered by country, also shows distance to events

@@ -1,5 +1,5 @@
 # SecurityApp
-How to configure the app
+##How to configure the app
 1. Setup your Google Maps API Key a tutorial how to get yours can be found here:
   1.1 get the key
   https://developers.google.com/maps/documentation/android-sdk/get-api-key?hl=de
